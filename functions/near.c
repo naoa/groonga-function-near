@@ -31,8 +31,7 @@ func_near(grn_ctx *ctx, GNUC_UNUSED int nargs, GNUC_UNUSED grn_obj **args, grn_u
 {
   grn_obj *found;
 
-  found = grn_plugin_proc_alloc(ctx, user_data, GRN_DB_SHORT_TEXT, 0);
-  //found = GRN_PROC_ALLOC(GRN_DB_BOOL, 0);
+  found = grn_plugin_proc_alloc(ctx, user_data, GRN_DB_BOOL, 0);
   if (!found) {
     return NULL;
   }
