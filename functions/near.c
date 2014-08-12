@@ -47,13 +47,18 @@ selector_near(grn_ctx *ctx, GNUC_UNUSED grn_obj *table, GNUC_UNUSED grn_obj *ind
 {
   grn_rc rc = GRN_SUCCESS;
   grn_obj *index_column;
-  unsigned int n_indexes;
+  unsigned int n_indexes = 1;
 
-  grn_obj *column = args[1];
+  grn_obj *obj = args[1];
   grn_obj *max_interval = args[2];
   grn_obj *keywords_string = args[3];
 
-  n_indexes = grn_column_index(ctx, column, GRN_OP_MATCH, &index_column, 1, NULL);
+  if (obj->header.type == GRN_COLUMN_INDEX) {
+    index_column = obj;
+  } else {
+    n_indexes = grn_column_index(ctx, obj, GRN_OP_MATCH, &index_column, 1, NULL);
+  }
+
   if (n_indexes) {
     grn_search_optarg options;
     options.mode = GRN_OP_NEAR;
