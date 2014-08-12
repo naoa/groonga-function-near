@@ -1,0 +1,25 @@
+register functions/near
+table_create Diaries TABLE_NO_KEY
+column_create Diaries title COLUMN_SCALAR ShortText
+column_create Diaries body COLUMN_SCALAR ShortText
+
+load --table Diaries
+[
+  {
+    "title": "2014-8-12's weather",
+    "body": "It was rainy in Tokyo. But it was sunny in Osaka."
+  },
+  {
+    "title": "2014-8-13's weather",
+    "body": "It was cloudy in Tokyo. But it was rainy in Sapporo."
+  },
+  {
+    "title": "2014-8-15's weather",
+    "body": "It was sunny in Osaka. But it was snowy in Tokyo."
+  }
+]
+
+select Diaries \
+  --output_columns body,_score \
+  --query '_id:3' \
+  --filter 'near(body, 2, "rainy tokyo")'

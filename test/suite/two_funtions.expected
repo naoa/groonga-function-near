@@ -1,0 +1,61 @@
+register functions/near
+[[0,0.0,0.0],true]
+table_create Diaries TABLE_NO_KEY
+[[0,0.0,0.0],true]
+column_create Diaries title COLUMN_SCALAR ShortText
+[[0,0.0,0.0],true]
+column_create Diaries body COLUMN_SCALAR ShortText
+[[0,0.0,0.0],true]
+load --table Diaries
+[
+  {
+    "title": "2014-8-12's weather",
+    "body": "It was rainy in Tokyo. But it was sunny in Osaka."
+  },
+  {
+    "title": "2014-8-13's weather",
+    "body": "It was cloudy in Tokyo. But it was rainy in Sapporo."
+  },
+  {
+    "title": "2014-8-15's weather",
+    "body": "It was sunny in Osaka. But it was snowy in Tokyo."
+  }
+]
+[[0,0.0,0.0],3]
+table_create Terms TABLE_HASH_KEY ShortText   --default_tokenizer TokenBigram   --normalizer NormalizerAuto
+[[0,0.0,0.0],true]
+column_create Terms diaries_body   COLUMN_INDEX|WITH_POSITION   Diaries body
+[[0,0.0,0.0],true]
+select Diaries   --output_columns body,_score   --match_columns 'body'   --query 'tokyo'   --filter 'near(body, 2, "rainy tokyo") || near(body, 2, "sunny Osaka")'
+[
+  [
+    0,
+    0.0,
+    0.0
+  ],
+  [
+    [
+      [
+        2
+      ],
+      [
+        [
+          "body",
+          "ShortText"
+        ],
+        [
+          "_score",
+          "Int32"
+        ]
+      ],
+      [
+        "It was rainy in Tokyo. But it was sunny in Osaka.",
+        3
+      ],
+      [
+        "It was sunny in Osaka. But it was snowy in Tokyo.",
+        2
+      ]
+    ]
+  ]
+]
