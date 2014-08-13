@@ -46,8 +46,8 @@ selector_near(grn_ctx *ctx, GNUC_UNUSED grn_obj *table, GNUC_UNUSED grn_obj *ind
               grn_obj *res, grn_operator op)
 {
   grn_rc rc = GRN_SUCCESS;
-  grn_obj *index_column;
-  unsigned int n_indexes = 1;
+  grn_obj *index_column = NULL;
+  unsigned int n_indexes;
 
   grn_obj *obj = args[1];
   grn_obj *max_interval = args[2];
@@ -55,6 +55,7 @@ selector_near(grn_ctx *ctx, GNUC_UNUSED grn_obj *table, GNUC_UNUSED grn_obj *ind
 
   if (obj->header.type == GRN_COLUMN_INDEX) {
     index_column = obj;
+    n_indexes = 1;
   } else {
     n_indexes = grn_column_index(ctx, obj, GRN_OP_MATCH, &index_column, 1, NULL);
   }
@@ -70,9 +71,12 @@ selector_near(grn_ctx *ctx, GNUC_UNUSED grn_obj *table, GNUC_UNUSED grn_obj *ind
     options.max_size = 0;
     grn_obj_search(ctx, index_column, keywords_string, res, op, &options);
   } else {
-    return GRN_INVALID_ARGUMENT;
+    rc = GRN_INVALID_ARGUMENT;
   }
 
+  if (index_column) {
+    grn_obj_unlink(ctx, index_column);
+  }
   return rc;
 }
 
