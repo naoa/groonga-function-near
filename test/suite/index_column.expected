@@ -1,9 +1,5 @@
 register functions/near
-[[[-22,0.0,0.0],"already used name"],false]
-#|e| already used name
-#|e| groonga() [0x404d05]
-#|e| groonga() [0x40e04c]
-#|e| groonga() [0x403d99]
+[[0,0.0,0.0],true]
 table_create Diaries TABLE_NO_KEY
 [[0,0.0,0.0],true]
 column_create Diaries title COLUMN_SCALAR ShortText
