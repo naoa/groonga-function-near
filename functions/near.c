@@ -57,7 +57,7 @@ selector_near(grn_ctx *ctx, GNUC_UNUSED grn_obj *table, GNUC_UNUSED grn_obj *ind
     index_column = obj;
     n_indexes = 1;
   } else {
-    n_indexes = grn_column_index(ctx, obj, GRN_OP_MATCH, &index_column, 1, NULL);
+    n_indexes = grn_column_index(ctx, obj, GRN_OP_NEAR, &index_column, 1, NULL);
   }
 
   if (n_indexes) {
